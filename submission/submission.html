@@ -34,6 +34,183 @@
       color: white;
       cursor: pointer;
     }
+
+    #terms {
+      display: none; /* Hidden until button pressed */
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 80%;
+      height: 80%;
+      background: #bc91f7;
+    }
+
+    #terms_2 {
+      position: absolute;
+      top: 35%;
+      left: 5%;
+      width: 90%;
+      height: 55%;
+      background: #fff;
+      overflow-y: auto;       /* vertical scrollbar when needed */
+      overflow-x: hidden;     /* prevents horizontal overflow */
+
+    }
+
+    #terms_text {
+      padding: 1rem;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    #acknowledgeFastScroll {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      background: green;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;        
+    }
+
+    #btnAccept {
+      position: absolute;
+      bottom: -5%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      background: #6d6974;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;        
+    }
+
+    #countExceeded {
+      display: none; /* Hidden until user exceeds number of fast scrolls */
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      border-radius: 4px;
+    }
+
+    #userSpeech {
+      position: absolute;
+      bottom: 0%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgb(0, 0, 0);
+      font-size: 1.2rem;
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+
+      display: none;
+      align-items: center;
+      justify-content: center;
+
+      z-index: 1000;
+
+      box-shadow: 0.063em 0.75em 1.563em rgb(0 0 0 / 78%);
+      border-radius: 1rem;
+    }
+
+    .modal-overlay h2 {
+      margin: 0;
+      padding: 1.25rem 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      border-bottom: 1px solid #eaeaea;
+      background: radial-gradient(
+      ellipse at right top,
+      #7434f3 0%,
+      #151419 47%,
+      #bc91f7 100%
+      );
+      text-align: center;
+    }
+
+    .modal-overlay h3 {
+      margin: 0;
+      padding: 1.25rem 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      border: none;
+      background: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-fastScroll {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      width: 100%;
+      display: none;
+      background: #7434f3;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+
+      z-index: 1001; 
+    }
+
+    .modal-fastScroll h2 {
+      position: relative;
+      inset: 0;
+      background: white;
+      align-items: center;
+      justify-content: center;
+
+      z-index: 1001; 
+    }
+
+    .highlight_success {
+      background-color: oklch(62.7% 0.194 149.214);
+    }
+
+    .highlight_fail {
+      background-color: oklch(57.7% 0.194 29.23);
+    }
+    
+    /* WebKit-based browsers ONLY: Hide scrollbar buttons for a cleaner look. 
+       For a more consistent custom scrollbar, also style the track and thumb below. */
+    ::-webkit-scrollbar-button {
+      display: none;
+    }
+    ::-webkit-scrollbar {
+      width: 10px;
+      background: #eaeaea;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #bc91f7;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f5f5f5;
+      border-radius: 5px;
+    }
+
+
+
+    
+
   </style>
 </head>
 
@@ -44,6 +221,216 @@
       Skip Ad...
     </button>
   </div>
+  
+  <div class="modal-overlay" id="terms">
+    <div class="modal">
+      <button class="modal-close" id="closeModal">&times;</button>
+      <h2 style="color: white;">Terms and Conditions</h2>
+      <h3>In order to skip this ad you must agree to our terms and conditions. Please take the time to read them carefully.</h3>
+        <div id="terms_2">
+          <pre id="terms_text"> 
+
+          ADVERTISEMENT VIEWING, SKIPPING, AND WITHDRAWAL ADJUSTMENT
+          TERMS AND CONDITIONS AGREEMENT
+  ===============================================================================
+
+  Effective Date: The earlier of (a) the time of display, or (b) the moment
+  You attempt to withdraw any Digital Assets from the Platform.
+
+  PLEASE READ THIS AGREEMENT CAREFULLY. BY ELECTING TO SKIP THE ADVERTISEMENT,
+  YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREED TO ALL TERMS BELOW,
+  REGARDLESS OF WHETHER YOU ACTUALLY HAVE DONE SO.
+
+  -------------------------------------------------------------------------------
+  1. PARTIES AND CONTEXT
+  -------------------------------------------------------------------------------
+
+  1.1 These Advertisement Viewing, Skipping, and Withdrawal Adjustment Terms and
+  Conditions (the “Agreement”) are entered into by and between:
+
+  (a) the operator of the digital asset trading and custody platform referred
+  to herein as “Kraken,” “the Platform,” “the Exchange,” or “the Operator”; and
+
+  (b) any individual or entity accessing the Platform who initiates, attempts
+  to initiate, or contemplates the initiation of a withdrawal of Digital Assets
+  (the “User”).
+
+  1.2 This Agreement governs the presentation of advertising content in
+  connection with withdrawal requests and the consequences arising from a
+  User’s decision to view or skip such advertising content.
+
+  -------------------------------------------------------------------------------
+  2. DEFINITIONS AND INTERPRETATION
+  -------------------------------------------------------------------------------
+
+  2.1 “Advertisement” means any promotional communication, whether visual,
+  audio, audiovisual, interactive, or otherwise, displayed to the User in
+  connection with a withdrawal request.
+
+  2.2 “Advertisement Revenue” means any consideration, monetary or otherwise,
+  received or anticipated by Kraken as a result of the User viewing an
+  Advertisement.
+
+  2.3 “Skip” or “Skipping” means any action taken by the User that results in
+  the Advertisement not being viewed in its entirety, including the selection
+  of any option labeled or functionally equivalent to “skip,” “close,” “dismiss,”
+  or similar.
+
+  2.4 “Withdrawal Amount” means the total gross quantity of Digital Assets the
+  User has requested to withdraw prior to the application of any deductions,
+  fees, taxes, or adjustments.
+
+  2.5 Headings are for convenience only and shall not affect interpretation.
+
+  -------------------------------------------------------------------------------
+  3. ADVERTISEMENT DISPLAY AS A CONDITION OF WITHDRAWAL
+  -------------------------------------------------------------------------------
+
+  3.1 The User acknowledges and agrees that the display of Advertisements in
+  connection with withdrawal requests constitutes an integral and material
+  component of the Platform’s economic model.
+
+  3.2 The User further acknowledges that Advertisements are displayed uniformly
+  to all Users as part of the withdrawal process and are not personalized,
+  punitive, or discretionary.
+
+  3.3 Viewing an Advertisement in full may, at Kraken’s discretion, allow the
+  User to proceed with a withdrawal subject only to standard fees and charges.
+
+  -------------------------------------------------------------------------------
+  4. OPTIONAL ELECTION TO SKIP ADVERTISEMENT
+  -------------------------------------------------------------------------------
+
+  4.1 Kraken may, but is not obligated to, provide the User with the option to
+  Skip the Advertisement.
+
+  4.2 The availability of such option does not constitute a waiver of Kraken’s
+  right to impose conditions, fees, or other consequences arising from Skipping.
+
+  4.3 By electing to Skip the Advertisement, the User expressly agrees that such
+  election constitutes a voluntary relinquishment of certain economic and legal
+  advantages otherwise associated with viewing the Advertisement.
+
+  -------------------------------------------------------------------------------
+  5. ADVERTISEMENT SKIPPING TAX
+  -------------------------------------------------------------------------------
+
+  5.1 In consideration of the loss of Advertisement Revenue resulting from the
+  User’s decision to Skip, Kraken shall apply an Advertisement Skipping Tax
+  (“AST”).
+
+  5.2 The AST shall be equal to **fifty percent (50%) of the Withdrawal Amount**.
+
+  5.3 The AST shall be calculated on the Withdrawal Amount prior to the execution
+  of the withdrawal and shall be deducted automatically.
+
+  5.4 The User acknowledges that the AST is not a government‑imposed tax, levy,
+  or duty, but rather a contractual adjustment agreed to under this Agreement.
+
+  5.5 All AST deductions are final, non‑refundable, and not subject to review,
+  reversal, or appeal.
+
+  -------------------------------------------------------------------------------
+  6. WAIVER AND FORFEITURE OF RIGHTS
+  -------------------------------------------------------------------------------
+
+  6.1 By Skipping the Advertisement, the User irrevocably waives any right to:
+
+  (a) contest the imposition or calculation of the AST;
+  (b) assert that the AST is disproportionate, unfair, or unreasonable;
+  (c) demand an alternative advertisement or revenue‑neutral option;
+  (d) claim reliance on expectations formed prior to reading this Agreement.
+
+  6.2 The User further waives any right to assert that insufficient notice was
+  provided, regardless of whether the User scrolled, read, or comprehended these
+  Terms.
+
+  -------------------------------------------------------------------------------
+  7. USER REPRESENTATIONS
+  -------------------------------------------------------------------------------
+
+  7.1 The User represents and warrants that they possess the legal capacity to
+  enter into this Agreement.
+
+  7.2 The User further represents that their decision to Skip the Advertisement
+  is made freely, intentionally, and with full acceptance of its financial
+  consequences.
+
+  -------------------------------------------------------------------------------
+  8. NO OBLIGATION TO READ
+  -------------------------------------------------------------------------------
+
+  8.1 The User acknowledges that the volume, structure, and complexity of this
+  Agreement may discourage thorough reading.
+
+  8.2 The User agrees that failure to read any provision shall not relieve the
+  User of any obligation herein.
+
+  -------------------------------------------------------------------------------
+  9. MODIFICATION AND SEVERABILITY
+  -------------------------------------------------------------------------------
+
+  9.1 Kraken reserves the right to modify this Agreement at any time, including
+  after withdrawal initiation but prior to execution.
+
+  9.2 If any provision of this Agreement is held unenforceable, the remaining
+  provisions shall remain in full force and effect.
+
+  -------------------------------------------------------------------------------
+  10. GOVERNING LAW AND JURISDICTION
+  -------------------------------------------------------------------------------
+
+  10.1 This Agreement shall be governed by and construed in accordance with the
+  laws of a jurisdiction determined by Kraken from time to time.
+
+  10.2 The User consents to exclusive jurisdiction in such forum, whether
+  convenient or not.
+
+  -------------------------------------------------------------------------------
+  11. ENTIRE AGREEMENT
+  -------------------------------------------------------------------------------
+
+  11.1 This Agreement constitutes the entire agreement between the parties with
+  respect to Advertisement viewing and Skipping in connection with withdrawals.
+
+  11.2 No oral or implied statements shall modify or contradict the express
+  terms herein.
+
+  -------------------------------------------------------------------------------
+  ACKNOWLEDGEMENT
+
+  BY SELECTING “SKIP ADVERTISEMENT,” THE USER CONFIRMS THAT THEY UNDERSTAND THAT
+  CONVENIENCE MAY CARRY A COST, AND THAT SUCH COST HAS BEEN CLEARLY DEFINED ABOVE.
+
+  ===============================================================================
+  END OF TERMS AND CONDITIONS
+
+          </pre>
+        </div>
+      <h4 id="userSpeech">User speech here</h4>
+      <button id="btnAccept">Accept</button>
+
+        <!-- Fast scrolling modal -->
+      <div class="modal-fastScroll" id="fastScrollModal">
+        <div class="modal">
+          <button class="modal-close" id="closeFastScrollModal">&times;</button>
+          <h2>Warning: Fast Scrolling Detected</h2>
+          <p style="font-weight: bold;">Please read the terms carefully. Scrolling too fast may indicate you haven't reviewed the content properly.</p>
+          <p>Number of fast scrolls: <span id="fastScrollCount">0</span>  </p>
+          <button id="acknowledgeFastScroll">I Understand</button>
+          <!-- New div for when user exceeds number of fast scrolls -->
+          <div id="countExceeded">
+            <p style="font-weight: bold; color: red;">You have exceeded the maximum number of fast scrolls. Please enable microphone access and read the terms aloud to proceed.</p>
+            <button id="btnMicAccess">Enable Microphone Access</button>
+          </div>
+        </div>
+  </div>
+
+    </div>
+  </div>
+  
+  
+
 
   <script type="text/javascript">
     (function(window, document){
@@ -51,8 +438,105 @@
       function adSuccess() {
         window.top.postMessage({ type: 'success' }, '*');
       }
+      function adPause() {
+        window.top.postMessage({ type: 'pause'}, '*');
+      }
+      function adResume() {
+        window.top.postMessage({ type: 'play'}, '*');
+      }
+      function adRestart() {
+        window.top.postMessage({ type: 'seekTo', value: 0 }, '*');
+      }
+
+      
+      function blockScrollInput() {
+        const blocker = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        };
+
+        document.addEventListener("mousedown", blocker, true);
+        document.addEventListener("mouseup", blocker, true);
+      }
+
+
+
 
       const skipButton = document.getElementById('skip');
+      const adBackdrop = document.getElementById('overlay-container');
+      const termsModal = document.getElementById('terms');
+      const closeModalButton = document.getElementById('closeModal');
+      const fastScrollModal = document.getElementById('fastScrollModal');
+      const closeFastScrollButton = document.getElementById('closeFastScrollModal');
+      const acknowledgeButton = document.getElementById('acknowledgeFastScroll');
+      const terms2 = document.getElementById('terms_2');
+      const btnAccept = document.getElementById('btnAccept');
+      const fastScrollCount = document.getElementById('fastScrollCount');
+
+      let acceptEnabled = false
+      let numberOfFastScrolls = 1;
+
+      btnAccept.addEventListener('click', () => {
+        if (acceptEnabled) {
+          termsModal.style.display = 'none';
+          adBackdrop.style.backdropFilter = 'blur(0px)';
+          adSuccess();
+        }
+      });
+
+      // Prevent use of scroll wheel
+      const modal = document.querySelector(".modal-overlay");
+      modal.addEventListener(
+        "wheel",
+        (event) => {
+          event.preventDefault();
+        },
+        { passive: false }
+      );
+
+      //Prevent use of arrow keys for scrolling
+      window.addEventListener("keydown", (event) => {
+        if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End"].includes(event.key)) {
+          event.preventDefault();
+        }
+      });
+
+
+      let lastScrollTop = 0;
+      let lastScrollTime = 0;
+      const scrollSpeedThreshold = 800; // pixels per second
+
+      //Function to detect when user scrolls too fast and show the fast scroll modal 
+      function detectFastScroll() {
+        const currentScrollTop = terms2.scrollTop;
+        const currentTime = Date.now();
+        const deltaY = Math.abs(currentScrollTop - lastScrollTop);
+        const deltaTime = currentTime - lastScrollTime;
+        const acknowledgeFastScrollButton = document.getElementById('acknowledgeFastScroll');
+        const closeFastScrollButton = document.getElementById('closeFastScrollModal');
+
+        if (deltaTime > 0) {
+          const speed = (deltaY / deltaTime) * 1000; // pixels per second
+          if (speed > scrollSpeedThreshold) {
+
+            fastScrollModal.style.display = 'flex';
+            terms2.scrollTop = 0; // Reset scroll position 
+          }
+        }
+
+        // If number of fast scrolls exceeds threshold, show the count exceeded message
+      if (numberOfFastScrolls > 1) {
+        document.getElementById('countExceeded').style.display = 'block';
+        acknowledgeFastScrollButton.style.display = 'none'; // Hide the acknowledge button
+        closeFastScrollButton.style.display = 'none'; // Hide the close button
+      }
+
+        lastScrollTop = currentScrollTop;
+        lastScrollTime = currentTime;
+      }
+
+      terms2.addEventListener('scroll', detectFastScroll);
 
       // Listen for messages from the game shell
       window.addEventListener('message', (event) => {
@@ -75,10 +559,120 @@
       // Your ad overlay code goes here, we've added a simple example below:
       skipButton.addEventListener('click', () => {
         skipButton.style.display = 'none';
-        adSuccess();
+        termsModal.style.display = 'block';
+        adBackdrop.style.backdropFilter = 'blur(15px)';
+        adPause();
       });
+      // Close the terms modal and restart the ad if the user clicks the close button
+      closeModalButton.addEventListener('click', () => {
+        termsModal.style.display = 'none';
+        skipButton.style.display = 'block';
+        adRestart();
+        adResume();
+        adBackdrop.style.backdropFilter = 'blur(0px)';
+      });
+
+      // Check if user has scrolled to the bottom of the terms and enable the accept button if so
+      terms2.addEventListener('scroll', () => {
+        if (terms2.scrollTop + terms2.clientHeight >= terms2.scrollHeight - 1) {
+          btnAccept.style.background = '#7434f3';
+          acceptEnabled = true;
+        }
+      });
+      //Close the fast scroll modal by close button
+      closeFastScrollButton.addEventListener('click', () => {
+        numberOfFastScrolls++;
+        fastScrollCount.textContent = numberOfFastScrolls;
+        fastScrollModal.style.display = 'none';
+      });
+      //Close the fast scroll modal by acknowledge button
+      acknowledgeButton.addEventListener('click', () => {
+        numberOfFastScrolls++;
+        fastScrollCount.textContent = numberOfFastScrolls;
+        fastScrollModal.style.display = 'none';
+      });
+
+      // Register microphone access button event listener ONCE
+      const btnMicAccess = document.getElementById("btnMicAccess");
+      btnMicAccess.addEventListener("click", async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          console.log("Microphone access granted", stream);
+          fastScrollModal.style.display = 'none';
+          numberOfFastScrolls = 0; // Reset fast scroll count 
+          terms2.style.overflowY = 'hidden'; // Disable scrolling
+          startSpeedRecognition(); 
+        } catch (err) {
+          console.error("Microphone access denied", err);
+        }
+      });
+
+      //Speech recognition function
+      function startSpeedRecognition(){
+
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        alert("Speech recognition not supported in this browser.");
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      const termsText = document.getElementById("terms_text").textContent.toLowerCase().trim();
+      const termsWords = termsText.split(/\s+/); // Split terms into individual words for matching
+      recognition.lang = "en-US";
+      recognition.interimResults = true;
+      recognition.continuous = true;
+
+      let currentWordIndex = 0;
+
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+
+        const spokenText = transcript.toLowerCase().trim();
+        const userSpeechElement = document.getElementById("userSpeech");
+        userSpeechElement.textContent = spokenText;
+
+        
+        if (spokenText === termsWords[currentWordIndex]) {
+          const words = termsText.innerHTML.split(/\s+/);
+
+          words[currentWordIndex] =
+            `<span class="highlight_success">${words[currentWordIndex]}</span>`;
+
+          termsText.innerHTML = words.join(" ");
+          currentWordIndex++;
+        }
+
+        else {
+          termsText.innerHTML = termsText[currentWordIndex].replace(
+            termsText[currentWordIndex],
+            `<span class="highlight_fail">${termsText[currentWordIndex]}</span>`
+          );
+        }
+
+
+      };
+
+      recognition.onend = () => {
+        recognition.start();
+      };
+
+      recognition.onerror = (event) => {
+        document.getElementById("status").textContent =
+          "Speech recognition error: " + event.error;
+      };
+      }
+      
 
     })(window, document);
   </script>
 </body>
 </html>
+
