@@ -546,7 +546,7 @@
           }
         }
 
-        // If number of fast scrolls exceeds threshold, show the count exceeded message
+      // If number of fast scrolls exceeds threshold, show the count exceeded message
       if (numberOfFastScrolls > 3) {
         document.getElementById('countExceeded').style.display = 'block';
         acknowledgeFastScrollButton.style.display = 'none'; // Hide the acknowledge button
@@ -719,6 +719,10 @@
           const lastHighlightedWord = highlights[highlights.length - 1];
           if(lastHighlightedWord) {
           lastHighlightedWord.scrollIntoView({ behavior: "smooth", block: "center" });
+
+          if (currentWordIndex > 10) {
+            pleaseRead.style.display = 'none'; // Hide the "Please read aloud" message after user has read a certain number of words
+            }
           }
 
       };
