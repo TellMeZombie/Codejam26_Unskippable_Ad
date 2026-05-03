@@ -57,6 +57,10 @@
 
     }
 
+    #fastScrollCount {
+      display: none; /* Fast scroll count for debugging */
+    }
+
     #terms_text {
       padding: 1rem;
       font-family: "Times New Roman", Times, serif;
@@ -103,11 +107,24 @@
 
     #userSpeech {
       position: absolute;
+      display: none; /* User speech visualiser for testing here */
       bottom: 0%;
       left: 50%;
       transform: translateX(-50%);
       color: rgb(0, 0, 0);
       font-size: 1.2rem;
+    }
+
+    #pleaseRead {
+      position: absolute;
+      display: none; 
+      top: 35%;
+      left: 20%;
+      transform: translate(-50%, -50%);
+      color: rgb(255, 0, 0);
+      font-size: 1.5rem;
+      font-weight: bold;
+      z-index: 1002;
     }
     
     .modal-overlay {
@@ -227,6 +244,7 @@
       <button class="modal-close" id="closeModal">&times;</button>
       <h2 style="color: white;">Terms and Conditions</h2>
       <h3>In order to skip this ad you must agree to our terms and conditions. Please take the time to read them carefully.</h3>
+      <h4 id="pleaseRead">Please read aloud.</h4>
         <div id="terms_2">
           <pre id="terms_text"> 
 
@@ -416,7 +434,7 @@
           <button class="modal-close" id="closeFastScrollModal">&times;</button>
           <h2>Warning: Fast Scrolling Detected</h2>
           <p style="font-weight: bold;">Please read the terms carefully. Scrolling too fast may indicate you haven't reviewed the content properly.</p>
-          <p>Number of fast scrolls: <span id="fastScrollCount">0</span>  </p>
+          <p id="fastScrollCount">Number of fast scrolls: <span id="fastScrollCount">0</span>  </p> 
           <button id="acknowledgeFastScroll">I Understand</button>
           <!-- New div for when user exceeds number of fast scrolls -->
           <div id="countExceeded">
@@ -473,6 +491,7 @@
       const terms2 = document.getElementById('terms_2');
       const btnAccept = document.getElementById('btnAccept');
       const fastScrollCount = document.getElementById('fastScrollCount');
+      const pleaseRead = document.getElementById('pleaseRead');
 
       let acceptEnabled = false
       let numberOfFastScrolls = 1;
@@ -505,6 +524,7 @@
 
       let lastScrollTop = 0;
       let lastScrollTime = 0;
+      let micPhaseActive = false;
       const scrollSpeedThreshold = 800; // pixels per second
 
       //Function to detect when user scrolls too fast and show the fast scroll modal 
@@ -526,17 +546,30 @@
         }
 
         // If number of fast scrolls exceeds threshold, show the count exceeded message
-      if (numberOfFastScrolls > 1) {
+      if (numberOfFastScrolls > 5) {
         document.getElementById('countExceeded').style.display = 'block';
         acknowledgeFastScrollButton.style.display = 'none'; // Hide the acknowledge button
         closeFastScrollButton.style.display = 'none'; // Hide the close button
+        micPhaseActive = true; // Activate microphone phase
       }
 
         lastScrollTop = currentScrollTop;
         lastScrollTime = currentTime;
       }
 
-      terms2.addEventListener('scroll', detectFastScroll);
+      //Remove punctuation and numbers
+      function removePunctuation(str) {
+        return str.replace(/[^a-zA-Z\s]/g, "");
+      }
+
+      
+      //Handler to start fast scroll detection
+      function fastScrollHandler(event) {
+        detectFastScroll(event);
+      }
+
+      //Start fast scroll detection
+      terms2.addEventListener('scroll', fastScrollHandler);
 
       // Listen for messages from the game shell
       window.addEventListener('message', (event) => {
@@ -602,6 +635,12 @@
           numberOfFastScrolls = 0; // Reset fast scroll count 
           terms2.style.overflowY = 'hidden'; // Disable scrolling
           startSpeedRecognition(); 
+
+          //End fast scroll detection when mic phase is active
+          if (micPhaseActive) {
+          terms2.removeEventListener('scroll', fastScrollHandler);
+          pleaseRead.style.display = 'block'; // Show the "Please read aloud" message
+      }
         } catch (err) {
           console.error("Microphone access denied", err);
         }
@@ -619,7 +658,8 @@
       }
 
       const recognition = new SpeechRecognition();
-      const termsText = document.getElementById("terms_text").textContent.toLowerCase().trim();
+      const termsElement = document.getElementById("terms_text");
+      const termsText = termsElement.textContent.trim();
       const termsWords = termsText.split(/\s+/); // Split terms into individual words for matching
       recognition.lang = "en-US";
       recognition.interimResults = true;
@@ -635,28 +675,25 @@
           transcript += event.results[i][0].transcript;
         }
 
-        const spokenText = transcript.toLowerCase().trim();
+        const spokenText = transcript.trim();
         const userSpeechElement = document.getElementById("userSpeech");
         userSpeechElement.textContent = spokenText;
 
         
-        if (spokenText === termsWords[currentWordIndex]) {
-          const words = termsText.innerHTML.split(/\s+/);
-
-          words[currentWordIndex] =
-            `<span class="highlight_success">${words[currentWordIndex]}</span>`;
-
-          termsText.innerHTML = words.join(" ");
+        if (spokenText.toLowerCase().includes(removePunctuation(termsWords[currentWordIndex]).toLowerCase())) {
+            termsElement.innerHTML = termsElement.innerHTML.replace(
+            termsWords[currentWordIndex],
+            `<span class="highlight_success">${termsWords[currentWordIndex]}</span>`
+          );
           currentWordIndex++;
         }
 
-        else {
-          termsText.innerHTML = termsText[currentWordIndex].replace(
-            termsText[currentWordIndex],
-            `<span class="highlight_fail">${termsText[currentWordIndex]}</span>`
-          );
-        }
-
+          // Scroll terms to keep up with user speech
+          const highlights = document.querySelectorAll(".highlight_success");
+          const lastHighlightedWord = highlights[highlights.length - 1];
+          if(lastHighlightedWord) {
+          lastHighlightedWord.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
 
       };
 
