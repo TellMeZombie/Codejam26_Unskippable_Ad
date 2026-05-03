@@ -239,6 +239,7 @@
     </button>
   </div>
   
+  <!-- Terms and conditions div below -->
   <div class="modal-overlay" id="terms">
     <div class="modal">
       <button class="modal-close" id="closeModal">&times;</button>
@@ -252,7 +253,7 @@
           TERMS AND CONDITIONS AGREEMENT
   ===============================================================================
 
-  Effective Date: The earlier of (a) the time of display, or (b) the moment
+  Effective Date: The earlier of A, the time of display, or B, the moment
   You attempt to withdraw any Digital Assets from the Platform.
 
   PLEASE READ THIS AGREEMENT CAREFULLY. BY ELECTING TO SKIP THE ADVERTISEMENT,
@@ -264,12 +265,12 @@
   -------------------------------------------------------------------------------
 
   1.1 These Advertisement Viewing, Skipping, and Withdrawal Adjustment Terms and
-  Conditions (the “Agreement”) are entered into by and between:
+  Conditions are entered into by and between:
 
-  (a) the operator of the digital asset trading and custody platform referred
-  to herein as “Kraken,” “the Platform,” “the Exchange,” or “the Operator”; and
+  A: the operator of the digital asset trading and custody platform referred
+  to as “Kraken,” “the Platform,” “the Exchange,” or “the Operator”; and
 
-  (b) any individual or entity accessing the Platform who initiates, attempts
+  B: any individual or entity accessing the Platform who initiates, attempts
   to initiate, or contemplates the initiation of a withdrawal of Digital Assets
   (the “User”).
 
@@ -282,7 +283,7 @@
   -------------------------------------------------------------------------------
 
   2.1 “Advertisement” means any promotional communication, whether visual,
-  audio, audiovisual, interactive, or otherwise, displayed to the User in
+  audio, interactive, or otherwise, displayed to the User in
   connection with a withdrawal request.
 
   2.2 “Advertisement Revenue” means any consideration, monetary or otherwise,
@@ -335,9 +336,9 @@
 
   5.1 In consideration of the loss of Advertisement Revenue resulting from the
   User’s decision to Skip, Kraken shall apply an Advertisement Skipping Tax
-  (“AST”).
+  “AST”.
 
-  5.2 The AST shall be equal to **fifty percent (50%) of the Withdrawal Amount**.
+  5.2 The AST shall be equal to 50% of the Withdrawal Amount.
 
   5.3 The AST shall be calculated on the Withdrawal Amount prior to the execution
   of the withdrawal and shall be deducted automatically.
@@ -354,10 +355,10 @@
 
   6.1 By Skipping the Advertisement, the User irrevocably waives any right to:
 
-  (a) contest the imposition or calculation of the AST;
-  (b) assert that the AST is disproportionate, unfair, or unreasonable;
-  (c) demand an alternative advertisement or revenue‑neutral option;
-  (d) claim reliance on expectations formed prior to reading this Agreement.
+  A contest the imposition or calculation of the AST;
+  B assert that the AST is disproportionate, unfair, or unreasonable;
+  C demand an alternative advertisement or revenue‑neutral option;
+  D claim reliance on expectations formed prior to reading this Agreement.
 
   6.2 The User further waives any right to assert that insufficient notice was
   provided, regardless of whether the User scrolled, read, or comprehended these
@@ -546,7 +547,7 @@
         }
 
         // If number of fast scrolls exceeds threshold, show the count exceeded message
-      if (numberOfFastScrolls > 5) {
+      if (numberOfFastScrolls > 2) {
         document.getElementById('countExceeded').style.display = 'block';
         acknowledgeFastScrollButton.style.display = 'none'; // Hide the acknowledge button
         closeFastScrollButton.style.display = 'none'; // Hide the close button
@@ -557,9 +558,9 @@
         lastScrollTime = currentTime;
       }
 
-      //Remove punctuation and numbers
+      //Remove punctuation and numbers from a string
       function removePunctuation(str) {
-        return str.replace(/[^a-zA-Z\s]/g, "");
+          return str.replace(/[^a-zA-Z\s]/g, "");
       }
 
       
@@ -567,6 +568,15 @@
       function fastScrollHandler(event) {
         detectFastScroll(event);
       }
+
+      //Function to replace Nth number of a word
+      function replaceNth(text, search, replace, n) {
+      let i = 0;
+      return text.replace(new RegExp(search, "g"), match => {
+        i++;
+        return i === n ? replace : match;
+      });
+}
 
       //Start fast scroll detection
       terms2.addEventListener('scroll', fastScrollHandler);
@@ -660,7 +670,8 @@
       const recognition = new SpeechRecognition();
       const termsElement = document.getElementById("terms_text");
       const termsText = termsElement.textContent.trim();
-      const termsWords = termsText.split(/\s+/); // Split terms into individual words for matching
+      const termsWords = (termsText.split(/\s+/)); // Split terms into individual words for matching
+      let wordDict = {};
       recognition.lang = "en-US";
       recognition.interimResults = true;
       recognition.continuous = true;
@@ -678,13 +689,28 @@
         const spokenText = transcript.trim();
         const userSpeechElement = document.getElementById("userSpeech");
         userSpeechElement.textContent = spokenText;
+        let currentWord = removePunctuation(termsWords[currentWordIndex]).toLowerCase();
 
-        
-        if (spokenText.toLowerCase().includes(removePunctuation(termsWords[currentWordIndex]).toLowerCase())) {
-            termsElement.innerHTML = termsElement.innerHTML.replace(
+        //If spoken word matches current word to speak
+        if (spokenText.toLowerCase().includes(currentWord)) {
+
+          //Check if word has already been said, and increase instance number if so
+          if ((termsWords[currentWordIndex]) in wordDict) {
+            wordDict[termsWords[currentWordIndex]] += 1;
+          }
+          else {
+            //Add word to dictionary 
+            wordDict[termsWords[currentWordIndex]] = 1;
+          }
+          //Replace word in HTML element with same word but highlighted
+            termsElement.innerHTML = replaceNth(termsElement.innerHTML,
             termsWords[currentWordIndex],
-            `<span class="highlight_success">${termsWords[currentWordIndex]}</span>`
+            `<span class="highlight_success">${termsWords[currentWordIndex]}</span>`,
+            wordDict[termsWords[currentWordIndex]]
           );
+
+
+
           currentWordIndex++;
         }
 
