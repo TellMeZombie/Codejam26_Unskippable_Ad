@@ -271,8 +271,7 @@
   to as “Kraken,” “the Platform,” “the Exchange,” or “the Operator”; and
 
   B: any individual or entity accessing the Platform who initiates, attempts
-  to initiate, or contemplates the initiation of a withdrawal of Digital Assets
-  (the “User”).
+  to initiate, or contemplates the initiation of withdrawal of Digital Assets.
 
   1.2 This Agreement governs the presentation of advertising content in
   connection with withdrawal requests and the consequences arising from a
@@ -526,7 +525,7 @@
       let lastScrollTop = 0;
       let lastScrollTime = 0;
       let micPhaseActive = false;
-      const scrollSpeedThreshold = 800; // pixels per second
+      const scrollSpeedThreshold = 1400; // pixels per second
 
       //Function to detect when user scrolls too fast and show the fast scroll modal 
       function detectFastScroll() {
@@ -547,7 +546,7 @@
         }
 
       // If number of fast scrolls exceeds threshold, show the count exceeded message
-      if (numberOfFastScrolls > 3) {
+      if (numberOfFastScrolls > 4) {
         document.getElementById('countExceeded').style.display = 'block';
         acknowledgeFastScrollButton.style.display = 'none'; // Hide the acknowledge button
         closeFastScrollButton.style.display = 'none'; // Hide the close button
@@ -569,14 +568,19 @@
         detectFastScroll(event);
       }
 
+      function escapeRegex(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      }
+
+
       //Function to replace Nth number of a word
       function replaceNth(text, search, replace, n) {
       let i = 0;
-      return text.replace(new RegExp(search, "g"), match => {
+      return text.replace(new RegExp(escapeRegex(search), "g"), match => {
         i++;
         return i === n ? replace : match;
       });
-}
+      }
 
       //Start fast scroll detection
       terms2.addEventListener('scroll', fastScrollHandler);
