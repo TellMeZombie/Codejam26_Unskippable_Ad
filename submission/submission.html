@@ -197,17 +197,7 @@
 
       z-index: 1001; 
     }
-
-    .highlight_success {
-      background-color: oklch(62.7% 0.194 149.214);
-    }
-
-    .highlight_fail {
-      background-color: oklch(57.7% 0.194 29.23);
-    }
     
-    /* WebKit-based browsers ONLY: Hide scrollbar buttons for a cleaner look. 
-       For a more consistent custom scrollbar, also style the track and thumb below. */
     ::-webkit-scrollbar-button {
       display: none;
     }
@@ -438,8 +428,9 @@
           <button id="acknowledgeFastScroll">I Understand</button>
           <!-- New div for when user exceeds number of fast scrolls -->
           <div id="countExceeded">
-            <p style="font-weight: bold; color: red;">You have exceeded the maximum number of fast scrolls. Please enable microphone access and read the terms aloud to proceed.</p>
-            <button id="btnMicAccess">Enable Microphone Access</button>
+            <p style="font-weight: bold; color: red;">You continue to exceed a natural scolling speed. Please apologise in the box below and then take the time to read the terms carefully.</p>
+            <textarea placeholder="Apologise here..." id="apologyBox"></textarea>
+            <button id="submitApology">Submit Apology</button>
           </div>
         </div>
   </div>
@@ -488,10 +479,14 @@
       const fastScrollModal = document.getElementById('fastScrollModal');
       const closeFastScrollButton = document.getElementById('closeFastScrollModal');
       const acknowledgeButton = document.getElementById('acknowledgeFastScroll');
+      const apologyBox = document.getElementById('apologyBox');
+      const submitApologyButton = document.getElementById('submitApology');
       const terms2 = document.getElementById('terms_2');
       const btnAccept = document.getElementById('btnAccept');
       const fastScrollCount = document.getElementById('fastScrollCount');
       const pleaseRead = document.getElementById('pleaseRead');
+      const apologyWords = ["sorry", "apologise", "apologize", "my bad", "forgive me", "i was wrong", "i apologize"];
+      const bannedWords = ["not", "no", "never", "don't", "dont"]
 
       let acceptEnabled = false
       let numberOfFastScrolls = 1;
@@ -524,7 +519,6 @@
 
       let lastScrollTop = 0;
       let lastScrollTime = 0;
-      let micPhaseActive = false;
       const scrollSpeedThreshold = 1000; // pixels per second
 
       //Function to detect when user scrolls too fast and show the fast scroll modal 
@@ -535,22 +529,22 @@
         const deltaTime = currentTime - lastScrollTime;
         const acknowledgeFastScrollButton = document.getElementById('acknowledgeFastScroll');
         const closeFastScrollButton = document.getElementById('closeFastScrollModal');
+        
 
         if (deltaTime > 0) {
           const speed = (deltaY / deltaTime) * 1000; // pixels per second
           if (speed > scrollSpeedThreshold) {
-
             fastScrollModal.style.display = 'flex';
             terms2.scrollTop = 0; // Reset scroll position 
           }
         }
 
       // If number of fast scrolls exceeds threshold, show the count exceeded message
-      if (numberOfFastScrolls > 4) {
+      if (numberOfFastScrolls > 3) {
         document.getElementById('countExceeded').style.display = 'block';
         acknowledgeFastScrollButton.style.display = 'none'; // Hide the acknowledge button
         closeFastScrollButton.style.display = 'none'; // Hide the close button
-        micPhaseActive = true; // Activate microphone phase
+        apologyBox.value = ""; // Clear the apology box
       }
 
         lastScrollTop = currentScrollTop;
@@ -637,109 +631,18 @@
         numberOfFastScrolls++;
         fastScrollCount.textContent = numberOfFastScrolls;
         fastScrollModal.style.display = 'none';
-      });
-
-      // Register microphone access button event listener ONCE
-      const btnMicAccess = document.getElementById("btnMicAccess");
-      btnMicAccess.addEventListener("click", async () => {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          console.log("Microphone access granted", stream);
+      }); 
+      submitApologyButton.addEventListener('click', () => {
+        const apologyText = document.getElementById('apologyBox').value;
+        if (apologyText.trim() !== "" && apologyWords.some(word => removePunctuation(apologyText.toLowerCase()).includes(word)) && !bannedWords.some(word => removePunctuation(apologyText.toLowerCase()).includes(word))) {
+          acknowledgeButton.style.display = 'block'; 
+          document.getElementById('countExceeded').style.display = 'none';
           fastScrollModal.style.display = 'none';
-          numberOfFastScrolls = 0; // Reset fast scroll count 
-          terms2.style.overflowY = 'hidden'; // Disable scrolling
-          startSpeedRecognition(); 
-
-          //End fast scroll detection when mic phase is active
-          if (micPhaseActive) {
-          terms2.removeEventListener('scroll', fastScrollHandler);
-          pleaseRead.style.display = 'block'; // Show the "Please read aloud" message
-      }
-        } catch (err) {
-          console.error("Microphone access denied", err);
-        }
-      });
-
-      //Speech recognition function
-      function startSpeedRecognition(){
-
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-
-      if (!SpeechRecognition) {
-        alert("Speech recognition not supported in this browser.");
-        return;
-      }
-
-      const recognition = new SpeechRecognition();
-      const termsElement = document.getElementById("terms_text");
-      const termsText = termsElement.textContent.trim();
-      const termsWords = (termsText.split(/\s+/)); // Split terms into individual words for matching
-      let wordDict = {};
-      recognition.lang = "en-US";
-      recognition.interimResults = true;
-      recognition.continuous = true;
-
-      let currentWordIndex = 0;
-
-      recognition.start();
-
-      recognition.onresult = (event) => {
-        let transcript = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
-
-        const spokenText = transcript.trim();
-        const userSpeechElement = document.getElementById("userSpeech");
-        userSpeechElement.textContent = spokenText;
-        let currentWord = removePunctuation(termsWords[currentWordIndex]).toLowerCase();
-
-        //If spoken word matches current word to speak
-        if (spokenText.toLowerCase().includes(currentWord)) {
-
-          //Check if word has already been said, and increase instance number if so
-          if ((termsWords[currentWordIndex]) in wordDict) {
-            wordDict[termsWords[currentWordIndex]] += 1;
-          }
-          else {
-            //Add word to dictionary 
-            wordDict[termsWords[currentWordIndex]] = 1;
-          }
-          //Replace word in HTML element with same word but highlighted
-            termsElement.innerHTML = replaceNth(termsElement.innerHTML,
-            termsWords[currentWordIndex],
-            `<span class="highlight_success">${termsWords[currentWordIndex]}</span>`,
-            wordDict[termsWords[currentWordIndex]]
-          );
-
-
-
-          currentWordIndex++;
-        }
-
-          // Scroll terms to keep up with user speech
-          const highlights = document.querySelectorAll(".highlight_success");
-          const lastHighlightedWord = highlights[highlights.length - 1];
-          if(lastHighlightedWord) {
-          lastHighlightedWord.scrollIntoView({ behavior: "smooth", block: "center" });
-
-          if (currentWordIndex > 10) {
-            pleaseRead.style.display = 'none'; // Hide the "Please read aloud" message after user has read a certain number of words
-            }
-          }
-
-      };
-
-      recognition.onend = () => {
-        recognition.start();
-      };
-
-      recognition.onerror = (event) => {
-        document.getElementById("status").textContent =
-          "Speech recognition error: " + event.error;
-      };
-      }
+          numberOfFastScrolls = 0; // Reset fast scroll count after apology
+          fastScrollCount.textContent = numberOfFastScrolls;
+        } 
+      });    
+      
       
 
     })(window, document);
